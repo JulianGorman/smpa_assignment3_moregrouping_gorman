@@ -175,7 +175,7 @@ Use the mutate() function to create two new columns: one that extracts the year 
 
 8) Using the new columns you created in #7, use grouping to count up how many House Democrats during each month announced their support of impeachment.
 
-Answer: The month where the most members announced their support of impeachment was September of 2019, with 76 members announcing their support.
+Answer: The month where the most members announced their support of impeachment was September of 2019, with 76 members announcing their support for impeachment.
 ```{r}
 
   impeach %>% 
