@@ -41,6 +41,7 @@ impeach <- readRDS("impeach.rds")
 Write your code using grouping in the chunks below to help answer the following questions.
 
 1)  How many members in the dataset favor impeachment vs. not (using the `for_impeachment` column)?
+
 Answer: There were 26 House Democrats who did not favor of impeachment vs. 209 which were in favor.
 ```{r}
 
@@ -118,26 +119,24 @@ impeach %>%
 5)  Do the same as #4, but this time show the MEAN *percentage of the vote that Donald Trump received* for districts that are Yes for impeachment vs. No.  
 The relevant column for that is `trump_percent`.
 
+Answer: Donald Trump received an average of 43.82% of the vote in districts of members who were against impeachment, and received an average of 32.04% of the vote in members who were for impeachment. 
 ```{r}
 
-
-
-
-
-
-
-
+impeach %>% 
+  group_by(for_impeachment) %>% 
+  summarize(pctfortrump = mean(trump_percent))
 
 
 ```
 
 6)  Filter out only the members who are a yes for impeachment. Then of those "Yes" member, how many won their 2018 election by less than 5 percentage points (`margin_flag_2018`) vs. more?
 
+Answer: Out of members who were for impeachment, 17 won their district by 5 points or less, while 192 won their district by more than 5 points.
 ```{r}
 
-  
-
-
+impeach %>% 
+  filter(for_impeachment == "YES") %>% 
+  count(margin_flag_2018, name = "numberofmembers")
 
 
 
@@ -147,14 +146,13 @@ The relevant column for that is `trump_percent`.
 
 7)  Come up with another breakdown of your choosing for how you'd like to examine this dataset. Say what you'll look at, and then put the code below to find the answer.
 
+Question: Out of members who were a yes on impachment, how many flipped their district in 2018?
+
+Answer: Out of members who were for impeachment, 31 flipped their district in 2018, while 178 did not.
 ```{r}
-
-  
-
-
-
-
-
+impeach %>% 
+  filter(for_impeachment == "YES") %>% 
+    count(flip_2018, name = "numberofmembers")
 
 
 ```
@@ -165,10 +163,10 @@ Use the mutate() function to create two new columns: one that extracts the year 
 
 ```{r}
 
-  
-
-
-
+  impeach %>% 
+    mutate(year_announced = year(date_announced),
+            month_announced = month(date_announced)) %>% 
+    group_by(year_announced, month_announced)
 
 
 
@@ -177,8 +175,15 @@ Use the mutate() function to create two new columns: one that extracts the year 
 
 8) Using the new columns you created in #7, use grouping to count up how many House Democrats during each month announced their support of impeachment.
 
+Answer: The month where the most members announced their support of impeachment was September of 2019, with 76 members announcing their support.
 ```{r}
 
+  impeach %>% 
+    filter(for_impeachment == "YES") %>% 
+    mutate(year_announced = year(date_announced),
+            month_announced = month(date_announced)) %>% 
+    count(year_announced, month_announced, name = "numberofmembers") %>% 
+    arrange(desc(numberofmembers))
   
 
 
