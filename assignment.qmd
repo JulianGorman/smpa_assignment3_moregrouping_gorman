@@ -41,10 +41,13 @@ impeach <- readRDS("impeach.rds")
 Write your code using grouping in the chunks below to help answer the following questions.
 
 1)  How many members in the dataset favor impeachment vs. not (using the `for_impeachment` column)?
-
+Answer: There were 26 House Democrats who did not favor of impeachment vs. 209 which were in favor.
 ```{r}
 
-
+impeach %>% 
+  group_by(for_impeachment) %>% 
+  summarise(numberofmembers = n())
+  
 
 
 
@@ -55,9 +58,13 @@ Write your code using grouping in the chunks below to help answer the following 
   
 You'll want to ensure you do the grouping on both columns together, e.g. `group_by(column1, column2)`
 
+Answer: Out of members against impeachment, 19 were in districts below the national GDP while 7 were in districts above the national GDP. Out of members in support of impeachment, 83 were in districts below the national GDP and 126 were in districts above the national GDP.
+
 ```{r}
 
-
+impeach %>% 
+  group_by(for_impeachment, gdp_above_national) %>% 
+  summarise(numberofmembers = n())
 
 
 
@@ -70,10 +77,13 @@ You'll want to ensure you do the grouping on both columns together, e.g. `group_
 
 3)  Now do the same as #2, but this time instead of GDP, group by whether the district is above or below the national average for the percentage of college graduates. The column that captures this information is `pct_bachelors_compared_to_national`.
 
+Answer: Out of members against impeachment, 19 were in districts below the average national college graduation rate while 7 were in districts above the average national college graduation rate. Out of members in support of impeachment, 81 were in districts below the average national college graudation rate and 128 were in districts above the average national college graduation rate.
+
 ```{r}
 
-
-
+impeach %>% 
+  group_by(for_impeachment, pct_bachelors_compared_to_national) %>% 
+  summarise(numberofmembers = n())
 
 
 
@@ -89,10 +99,14 @@ Instead of counting how many districts are above/below the national average, thi
   
 In other words, you want to end up with the calculated mean for what that percentage is for the Yes districts and the No districts.
 
+Answer: Among members against impeachment, the average college grad rate across their districts was 27.65%. Among members for impeachment, the average college grad rate across their districts was 33.69%
+
 ```{r}
 
-
-
+impeach %>% 
+  group_by(for_impeachment) %>% 
+  summarize(avegradrate = mean(pct_bachelors))
+  
 
 
 
